@@ -21,7 +21,8 @@ namespace wb;
 /**
  * A Snak for a string.
  */
-class SnakTime extends Snak {
+class SnakTime extends Snak
+{
 
 	/**
 	 * Constructor
@@ -43,6 +44,10 @@ class SnakTime extends Snak {
 	 * 	9: years
 	 * 	10: months
 	 * 	11: days
+	 * 	NOT supported yet (see https://phabricator.wikimedia.org/T57755)
+	 * 	12: hour 
+	 * 	13: minute 
+	 * 	14: second 
 	 * @param $args array example:
 	 * 	timezone: 0,
 	 * 	before: 0,
@@ -51,24 +56,35 @@ class SnakTime extends Snak {
 	 * 	calendarmodel: "Q1985786"
 	 * @see https://www.mediawiki.org/wiki/Wikibase/DataModel/JSON
 	 */
-	public function __construct( $property, $time = null, $precision = 11, $args = [] ) {
+	public function __construct($property, $time = null, $precision = 11, $args = [])
+	{
 
 		// as default take current date and time
-		if( !$time ) {
+		if (!$time) {
 			$time = new \DateTime();
-			$time->setTimezone( new \DateTimeZone( 'UTC' ) );
+			$time->setTimezone(new \DateTimeZone('UTC'));
 
 			// Note that: <Hour, minute, and second are currently unused and should always be 00.> WHAT THE FUCK I'M READING HOLY CRAP WIKIBASE
-			$time->setTime( 0, 0 );
+			$time->setTime(0, 0);
 		}
 
 		// accept both a string or a datetime object
-		if( $time instanceof \DateTime ) {
-			$time = $time->format( '+Y-m-d\TH:i:s\Z' );
+		if ($time instanceof \DateTime) {
+			$time = $time->format('+Y-m-d\TH:i:s\Z');
 		}
 
-		return parent::__construct( 'value', $property, DataType::TIME,
-			new DataValueTime( $time, $precision, $args )
+		/*
+		Bacause of the note above
+		<Hour, minute, and second are currently unused and should always be 00.>
+		then we need to insure the instant is always 0
+		*/
+		$time = substr($time, 0, 11) . "T00:00:00Z";
+
+		return parent::__construct(
+			'value',
+			$property,
+			DataType::TIME,
+			new DataValueTime($time, $precision, $args)
 		);
 	}
 }

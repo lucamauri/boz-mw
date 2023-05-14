@@ -23,7 +23,8 @@ namespace wb;
  *
  * @since 2019-07-18
  */
-class Snaks {
+class Snaks
+{
 
 	/**
 	 * All the Snaks indexed by property
@@ -35,9 +36,10 @@ class Snaks {
 	 *
 	 * @param array $snaks Initial set of snaks
 	 */
-	public function __construct( $snaks = [] ) {
-		foreach( $snaks as $snak ) {
-			$this->add( $snak );
+	public function __construct($snaks = [])
+	{
+		foreach ($snaks as $snak) {
+			$this->add($snak);
 		}
 	}
 
@@ -47,16 +49,17 @@ class Snaks {
 	 * @param object $snak
 	 * @return this
 	 */
-	public function add( Snak $snak ) {
+	public function add(Snak $snak)
+	{
 
 		// eventually init the property container of snaks
 		$property = $snak->getProperty();
-		if( !isset( $this->snaks[ $property ] ) ) {
-			$this->snaks[ $property ] = [];
+		if (!isset($this->snaks[$property])) {
+			$this->snaks[$property] = [];
 		}
 
 		// append
-		$this->snaks[ $property ][] = $snak;
+		$this->snaks[$property][] = $snak;
 
 		return $this;
 	}
@@ -67,9 +70,10 @@ class Snaks {
 	 * @param string $property Property name e.g. 'P123'
 	 * @return array
 	 */
-	public function getInProperty( $property ) {
-		if( $this->hasInProperty( $property ) ) {
-			return $this->snaks[ $property ];
+	public function getInProperty($property)
+	{
+		if ($this->hasInProperty($property)) {
+			return $this->snaks[$property];
 		}
 		return [];
 	}
@@ -77,8 +81,9 @@ class Snaks {
 	/**
 	 * Check if there are some snaks in this property
 	 */
-	public function hasInProperty( $property ) {
-		return !empty( $this->snaks[ $property ] );
+	public function hasInProperty($property)
+	{
+		return !empty($this->snaks[$property]);
 	}
 
 	/**
@@ -86,8 +91,9 @@ class Snaks {
 	 *
 	 * @return boolean
 	 */
-	public function isEmpty() {
-		return empty( $this->snaks );
+	public function isEmpty()
+	{
+		return empty($this->snaks);
 	}
 
 	/**
@@ -95,7 +101,8 @@ class Snaks {
 	 *
 	 * @return array
 	 */
-	public function getAllByProperty() {
+	public function getAllByProperty()
+	{
 		return $this->snaks;
 	}
 
@@ -104,10 +111,11 @@ class Snaks {
 	 *
 	 * @return int
 	 */
-	public function count() {
+	public function count()
+	{
 		$n = 0;
-		foreach( $this->getAll() as $property => $snaks ) {
-			$n += count( $snaks );
+		foreach ($this->getAll() as $property => $snaks) {
+			$n += count($snaks);
 		}
 		return $n;
 	}
@@ -117,15 +125,15 @@ class Snaks {
 	 *
 	 * @return array
 	 */
-	public function toData() {
+	public function toData()
+	{
 		$data = [];
-		foreach( $this->getAllByProperty() as $property => $snaks ) {
-			$data[ $property ] = [];
-			foreach( $snaks as $snak ) {
-				$data[ $property ][] = $snak->toData();
+		foreach ($this->getAllByProperty() as $property => $snaks) {
+			$data[$property] = [];
+			foreach ($snaks as $snak) {
+				$data[$property][] = $snak->toData();
 			}
 		}
 		return $data;
 	}
-
 }

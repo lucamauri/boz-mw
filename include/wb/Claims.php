@@ -1,6 +1,6 @@
 <?php
 # Boz-MW - Another MediaWiki API handler in PHP
-# Copyright (C) 2017-2023 Valerio Bozzolan, contributors
+# Copyright (C) 2017, 2018 Valerio Bozzolan
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -128,13 +128,12 @@ class Claims {
 	 * @return array
 	 */
 	public function toData() {
-		$data = [];
-		foreach( $this->getAllGrouped() as $prop => $claims ) {
-			$data[ $prop ] = [];
+		$all = $this->getAllGrouped();
+		foreach( $all as & $claims ) {
 			foreach( $claims as & $claim ) {
-				$data[ $prop ][] = $claim->toData();
+				$claim = $claim->toData();
 			}
 		}
-		return $data;
+		return $all;
 	}
 }

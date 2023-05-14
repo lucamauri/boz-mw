@@ -1,7 +1,6 @@
 <?php
 # Boz-MW - Another MediaWiki API handler in PHP
-# Copyright (C) 2017-2023 Valerio Bozzolan
-# Copyright (C) 2023      Valerio Bozzolan, Luca Mauri
+# Copyright (C) 2017 Valerio Bozzolan
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -22,18 +21,20 @@ namespace wb;
 /**
  * A Snak for a string representing localMedia datatype.
  */
-class SnakLocalMedia extends Snak {
+class SnakLocalMedia extends Snak
+{
 
 	/**
 	 * @param $property string Wikidata property as 'P123'
 	 * @param $value    string
 	 */
-	public function __construct( $property, $value ) {
+	public function __construct($property, $value)
+	{
 		return parent::__construct(
 			'value',
 			$property,
 			DataType::LOCALMEDIA,
-			new DataValueString( $value )
+			new DataValueString($value)
 		);
 	}
 }

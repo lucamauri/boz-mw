@@ -25,7 +25,8 @@ use generic\Singleton;
  *
  * This class is designed to have just one instance of this site
  */
-class StaticSite extends Singleton implements Site {
+class StaticSite extends Singleton implements Site
+{
 
 	/**
 	 * A sort of $wgCapitalLinks
@@ -71,26 +72,28 @@ class StaticSite extends Singleton implements Site {
 	 *
 	 * @param $api_url string MediaWiki API URL
 	 */
-	public function __construct( $api_url ) {
-		$this->api = new API( $api_url );
+	public function __construct($api_url)
+	{
+		$this->api = new API($api_url);
 
 		// just for laziness, to avoid some refactors.
 		// actually the user provides the API URL and not
 		// other stuff. So just use the API URL.
-		$this->guessBaseURLFromAPIURL( $api_url );
+		$this->guessBaseURLFromAPIURL($api_url);
 	}
 
 	/**
 	 * @override
 	 */
-	protected static function create() {
-		$site = static::createFromAPIURL( static::getApiURL() );
+	protected static function create()
+	{
+		$site = static::createFromAPIURL(static::getApiURL());
 
-		$site->setUID( static::UID );
+		$site->setUID(static::UID);
 
 		// Set default namespaces
-		foreach( Ns::defaultCanonicalNames() as $ns_id => $ns ) {
-			$site->setNamespace( new Ns( $ns_id, $ns ) );
+		foreach (Ns::defaultCanonicalNames() as $ns_id => $ns) {
+			$site->setNamespace(new Ns($ns_id, $ns));
 		}
 
 		return $site;
@@ -101,7 +104,8 @@ class StaticSite extends Singleton implements Site {
 	 *
 	 * @return string
 	 */
-	protected static function getApiURL() {
+	protected static function getApiURL()
+	{
 		return static::API_URL;
 	}
 
@@ -111,8 +115,9 @@ class StaticSite extends Singleton implements Site {
 	 * @param $data array GET/POST data arguments
 	 * @return mw\APIQuery
 	 */
-	public function createQuery( $data ) {
-		return $this->getApi()->createQuery( $data );
+	public function createQuery($data)
+	{
+		return $this->getApi()->createQuery($data);
 	}
 
 	/**
@@ -121,8 +126,9 @@ class StaticSite extends Singleton implements Site {
 	 * @param $data array HTTP GET data
 	 * @return mixed API result
 	 */
-	public function fetch( $data ) {
-		return $this->getApi()->fetch( $data );
+	public function fetch($data)
+	{
+		return $this->getApi()->fetch($data);
 	}
 
 	/**
@@ -133,8 +139,9 @@ class StaticSite extends Singleton implements Site {
 	 * @param $data array HTTP GET data
 	 * @return mixed API result
 	 */
-	public function post( $data ) {
-		return $this->getApi()->post( $data );
+	public function post($data)
+	{
+		return $this->getApi()->post($data);
 	}
 
 	/**
@@ -144,11 +151,12 @@ class StaticSite extends Singleton implements Site {
 	 * @return mixed
 	 * @see https://www.mediawiki.org/wiki/API:Edit
 	 */
-	public function edit( $data ) {
-		return $this->post( array_replace( $data, [
+	public function edit($data)
+	{
+		return $this->post(array_replace($data, [
 			'action' => 'edit',
-			'token'  => $this->getToken( \mw\Tokens::CSRF )
-		] ) );
+			'token'  => $this->getToken(\mw\Tokens::CSRF)
+		]));
 	}
 
 	/**
@@ -159,8 +167,9 @@ class StaticSite extends Singleton implements Site {
 	 * @param array $data Array of ContentDisposition(s)
 	 * @return mixed API result
 	 */
-	public function postMultipart( $data ) {
-		return $this->getApi()->postMultipart( $data );
+	public function postMultipart($data)
+	{
+		return $this->getApi()->postMultipart($data);
 	}
 
 	/**
@@ -170,11 +179,12 @@ class StaticSite extends Singleton implements Site {
 	 * @return mixed
 	 * @see https://www.mediawiki.org/wiki/API:Upload
 	 */
-	public function upload( $data ) {
-		return $this->postMultipart( array_replace( $data, [
+	public function upload($data)
+	{
+		return $this->postMultipart(array_replace($data, [
 			'action' => 'upload',
-			'token'  => $this->getToken( \mw\Tokens::CSRF )
-		] ) );
+			'token'  => $this->getToken(\mw\Tokens::CSRF)
+		]));
 	}
 
 	/**
@@ -182,7 +192,8 @@ class StaticSite extends Singleton implements Site {
 	 *
 	 * @return bool
 	 */
-	public function isLogged() {
+	public function isLogged()
+	{
 		return $this->getApi()->isLogged();
 	}
 
@@ -191,7 +202,8 @@ class StaticSite extends Singleton implements Site {
 	 *
 	 * @return string|null
 	 */
-	public function getUsername() {
+	public function getUsername()
+	{
 		return $this->getApi()->getUsername();
 	}
 
@@ -201,8 +213,9 @@ class StaticSite extends Singleton implements Site {
 	 *
 	 * @return self
 	 */
-	public function preloadTokens( $tokens ) {
-		$this->getApi()->preloadTokens( $tokens );
+	public function preloadTokens($tokens)
+	{
+		$this->getApi()->preloadTokens($tokens);
 		return $this;
 	}
 
@@ -212,8 +225,9 @@ class StaticSite extends Singleton implements Site {
 	 * @param $token string Token name
 	 * @return string Token value
 	 */
-	public function getToken( $token ) {
-		return $this->getApi()->getToken( $token );
+	public function getToken($token)
+	{
+		return $this->getApi()->getToken($token);
 	}
 
 	/**
@@ -222,8 +236,9 @@ class StaticSite extends Singleton implements Site {
 	 * @param $token string Token name
 	 * @return self
 	 */
-	public function invalidateToken( $token ) {
-		$this->getApi()->invalidateToken( $token );
+	public function invalidateToken($token)
+	{
+		$this->getApi()->invalidateToken($token);
 		return $this;
 	}
 
@@ -235,8 +250,9 @@ class StaticSite extends Singleton implements Site {
 	 * @param $password string MediaWiki password
 	 * @return self
 	 */
-	public function login( $username = null, $password = null ) {
-		$this->getApi()->login( $username, $password );
+	public function login($username = null, $password = null)
+	{
+		$this->getApi()->login($username, $password);
 		return $this;
 	}
 
@@ -246,8 +262,9 @@ class StaticSite extends Singleton implements Site {
 	 * @param int $id Namespace ID
 	 * @return bool
 	 */
-	public function hasNamespace( $id ) {
-		return array_key_exists( $id, $this->namespaces );
+	public function hasNamespace($id)
+	{
+		return array_key_exists($id, $this->namespaces);
 	}
 
 	/**
@@ -256,11 +273,12 @@ class StaticSite extends Singleton implements Site {
 	 * @param int $id Namespace ID
 	 * @return Ns Corresponding namespace
 	 */
-	public function getNamespace( $id ) {
-		if( ! $this->hasNamespace( $id ) ) {
-			throw new \Exception( sprintf( 'missing namespace %d', $id ) );
+	public function getNamespace($id)
+	{
+		if (!$this->hasNamespace($id)) {
+			throw new \Exception(sprintf('missing namespace %d', $id));
 		}
-		return $this->namespaces[ $id ];
+		return $this->namespaces[$id];
 	}
 
 	/**
@@ -269,9 +287,10 @@ class StaticSite extends Singleton implements Site {
 	 * @param $namespace Ns Namespace to be set/overwrited
 	 * @return self
 	 */
-	public function setNamespace( Ns $namespace ) {
+	public function setNamespace(Ns $namespace)
+	{
 		$id = $namespace->getID();
-		$this->namespaces[ $id ] = $namespace;
+		$this->namespaces[$id] = $namespace;
 		return $this;
 	}
 
@@ -281,10 +300,11 @@ class StaticSite extends Singleton implements Site {
 	 * @param $name string
 	 * @return object|false
 	 */
-	public function findNamespace( $name ) {
-		$name = Ns::normalizeName( $name );
-		foreach( $this->namespaces as $ns ) {
-			if( $ns->getName() === $name ) {
+	public function findNamespace($name)
+	{
+		$name = Ns::normalizeName($name);
+		foreach ($this->namespaces as $ns) {
+			if ($ns->getName() === $name) {
 				return $ns;
 			}
 		}
@@ -297,9 +317,10 @@ class StaticSite extends Singleton implements Site {
 	 * @param $namespaces array Array of namespaces
 	 * @return self
 	 */
-	public function setNamespaces( $namespaces ) {
-		foreach( $namespaces as $namespace ) {
-			$this->setNamespace( $namespace );
+	public function setNamespaces($namespaces)
+	{
+		foreach ($namespaces as $namespace) {
+			$this->setNamespace($namespace);
 		}
 		return $this;
 	}
@@ -310,7 +331,8 @@ class StaticSite extends Singleton implements Site {
 	 * @param string E.g. 'enwiki'
 	 * @return self
 	 */
-	public function setUID( $uid ) {
+	public function setUID($uid)
+	{
 		$this->uid = $uid;
 		return $this;
 	}
@@ -320,7 +342,8 @@ class StaticSite extends Singleton implements Site {
 	 *
 	 * @return API
 	 */
-	public function getApi() {
+	public function getApi()
+	{
 		return $this->api;
 	}
 
@@ -332,7 +355,8 @@ class StaticSite extends Singleton implements Site {
 	 * @param string $base_url
 	 * @return self
 	 */
-	public function setBaseURL( $base_url ) {
+	public function setBaseURL($base_url)
+	{
 		$this->baseURL = $base_url;
 		return $this;
 	}
@@ -344,7 +368,8 @@ class StaticSite extends Singleton implements Site {
 	 *
 	 * @return string
 	 */
-	public function getBaseURL() {
+	public function getBaseURL()
+	{
 		return $this->baseURL;
 	}
 
@@ -353,7 +378,8 @@ class StaticSite extends Singleton implements Site {
 	 *
 	 * @return null|string e.g. 'enwiki'
 	 */
-	public function getUID() {
+	public function getUID()
+	{
 		return $this->uid;
 	}
 
@@ -362,8 +388,9 @@ class StaticSite extends Singleton implements Site {
 	 *
 	 * @return Wikitext
 	 */
-	public function createWikitext( $wikitext = '' ) {
-		return new Wikitext( $this, $wikitext );
+	public function createWikitext($wikitext = '')
+	{
+		return new Wikitext($this, $wikitext);
 	}
 
 	/**
@@ -373,8 +400,9 @@ class StaticSite extends Singleton implements Site {
 	 * @param $ns int Namespace number
 	 * @return CompleteTitle
 	 */
-	public function createTitle( $title, $ns = 0 ) {
-		return new CompleteTitle( $this, $this->getNamespace( $ns ), new Title( $title, $this ) );
+	public function createTitle($title, $ns = 0)
+	{
+		return new CompleteTitle($this, $this->getNamespace($ns), new Title($title, $this));
 	}
 
 	/**
@@ -383,8 +411,9 @@ class StaticSite extends Singleton implements Site {
 	 * @param $s Page title with namespace prefix
 	 * @return CompleteTitle
 	 */
-	public function createTitleParsing( $s ) {
-		return CompleteTitle::createParsingTitle( $this, $s );
+	public function createTitleParsing($s)
+	{
+		return CompleteTitle::createParsingTitle($this, $s);
 	}
 
 	/**
@@ -393,8 +422,9 @@ class StaticSite extends Singleton implements Site {
 	 * @deprecate Unuseful, just use createTitleParsing()->createWikilink()
 	 * @return object
 	 */
-	public function createWikilink( CompleteTitle $title, $alias = null ) {
-		return $title->createWikilink( $alias );
+	public function createWikilink(CompleteTitle $title, $alias = null)
+	{
+		return $title->createWikilink($alias);
 	}
 
 	/**
@@ -403,7 +433,8 @@ class StaticSite extends Singleton implements Site {
 	 * @TODO generalize
 	 * @return boolean
 	 */
-	public function hasCapitalLinks() {
+	public function hasCapitalLinks()
+	{
 		return static::CAPITAL_LINKS;
 	}
 
@@ -413,8 +444,9 @@ class StaticSite extends Singleton implements Site {
 	 * @param $url string MediaWiki API URL
 	 * @return self
 	 */
-	public static function createFromAPIURL( $url ) {
-		return new static( $url );
+	public static function createFromAPIURL($url)
+	{
+		return new static($url);
 	}
 
 	/**
@@ -431,10 +463,10 @@ class StaticSite extends Singleton implements Site {
 	 *
 	 * @param string $api_url API URL
 	 */
-	protected function guessBaseURLFromAPIURL( $api_url ) {
+	protected function guessBaseURLFromAPIURL($api_url)
+	{
 
 		// I know, I know, it's not that simple
-		$this->setBaseURL( str_replace( '/w/api.php', '/wiki/', $api_url ) );
+		$this->setBaseURL(str_replace('/w/api.php', '/wiki/', $api_url));
 	}
-
 }

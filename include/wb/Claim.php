@@ -483,6 +483,7 @@ class Claim {
 	 * @override
 	 */
 	public function __toString() {
+		throw new Exception("asd");
 		return $this->toPrintableWikitext();
 	}
 }

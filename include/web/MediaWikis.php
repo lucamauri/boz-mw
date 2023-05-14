@@ -21,7 +21,8 @@ namespace web;
 /**
  * All the MediaWiki instances in the Internet :^)
  */
-abstract class MediaWikis {
+abstract class MediaWikis
+{
 
 	/**
 	 * Get all the registered MediaWiki classes
@@ -30,18 +31,21 @@ abstract class MediaWikis {
 	 *
 	 * @return array
 	 */
-	protected static function allClasses() {
+	protected static function allClasses()
+	{
 		return [
-			\wm\WikipediaIt      ::class,
-			\wm\WikipediaEn      ::class,
-			\wm\WikipediaEs      ::class,
-			\wm\WikipediaFr      ::class,
-			\wm\WikipediaDe      ::class,
-			\wm\Wikidata         ::class,
-			\wm\Commons          ::class,
-			\wm\MetaWiki         ::class,
-			\web\WikimediaCH     ::class,
+			\wm\WikipediaIt::class,
+			\wm\WikipediaEn::class,
+			\wm\WikipediaEs::class,
+			\wm\WikipediaFr::class,
+			\wm\WikipediaDe::class,
+			\wm\Wikidata::class,
+			\wm\Commons::class,
+			\wm\MetaWiki::class,
+			\web\WikimediaCH::class,
 			\web\LandscapeforWiki::class,
+			\web\WikiTrek::class,
+			\web\DataTrek::class,
 		];
 	}
 
@@ -50,8 +54,9 @@ abstract class MediaWikis {
 	 *
 	 * @generator
 	 */
-	public static function all() {
-		foreach( self::allClasses() as $classname ) {
+	public static function all()
+	{
+		foreach (self::allClasses() as $classname) {
 			yield $classname::instance();
 		}
 	}
@@ -62,9 +67,10 @@ abstract class MediaWikis {
 	 * @param $uid string
 	 * @return mw\StaticSite|false
 	 */
-	public static function findFromUID( $uid ) {
-		foreach( self::all() as $one ) {
-			if( $one::UID === $uid ) {
+	public static function findFromUID($uid)
+	{
+		foreach (self::all() as $one) {
+			if ($one::UID === $uid) {
 				return $one;
 			}
 		}
@@ -76,14 +82,15 @@ abstract class MediaWikis {
 	 *
 	 * @return array
 	 */
-	public static function allUIDs() {
+	public static function allUIDs()
+	{
 		$all = [];
 
-		foreach( self::all() as $wiki ) {
+		foreach (self::all() as $wiki) {
 			$all[] = $wiki::UID;
 		}
 
-		sort( $all );
+		sort($all);
 
 		return $all;
 	}
