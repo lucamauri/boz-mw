@@ -79,6 +79,7 @@ class SnakTime extends Snak
 		then we need to insure the instant is always 0
 		*/
 		$time = substr($time, 0, 11) . "T00:00:00Z";
+		//$time = substr($time, 0, 10);
 
 		return parent::__construct(
 			'value',

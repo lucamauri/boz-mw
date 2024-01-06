@@ -21,7 +21,8 @@ namespace wb;
 /**
  * A DataValue for a quantity.
  */
-class DataValueQuantity extends DataValue {
+class DataValueQuantity extends DataValue
+{
 
 	/**
 	 * @param $value mixed amount Any number e.g. 0
@@ -29,18 +30,26 @@ class DataValueQuantity extends DataValue {
 	 * @param $upper_bound mixed The $value at its maximum error e.g. +1
 	 * @param $lower_bound mixed The $value at its minimum error e.g. -1
 	 */
-	public function __construct( $amount, $wikidata_unit_id, $upper_bound = null, $lower_bound = null ) {
-		$value = [
-			'amount' => self::sign( $amount ),
-			'unit'   => "http://www.wikidata.org/entity/$wikidata_unit_id"
-		];
-		if( null !== $upper_bound ) {
-			$value['upperBound'] = self::int2string( $upper_bound );
+	public function __construct($amount, $wikidata_unit_id, $upper_bound = null, $lower_bound = null)
+	{
+		if (($wikidata_unit_id == null) or (strtoupper(substr($wikidata_unit_id, 0)) == "Q")) {
+			$value = [
+				'amount' => self::sign($amount),
+				'unit'   => "1"
+			];
+		} else {
+			$value = [
+				'amount' => self::sign($amount),
+				'unit'   => "http://www.wikidata.org/entity/$wikidata_unit_id"
+			];
 		}
-		if( null !== $lower_bound ) {
-			$value['lowerBound'] = self::int2string( $lower_bound );
+		if (null !== $upper_bound) {
+			$value['upperBound'] = self::int2string($upper_bound);
 		}
-		parent::__construct( DataType::QUANTITY, $value );
+		if (null !== $lower_bound) {
+			$value['lowerBound'] = self::int2string($lower_bound);
+		}
+		parent::__construct(DataType::QUANTITY, $value);
 	}
 
 	/**
@@ -49,15 +58,17 @@ class DataValueQuantity extends DataValue {
 	 * @param $n mixed
 	 * @return string
 	 */
-	private static function sign( $n ) {
+	private static function sign($n)
+	{
 		return $n > 0 ? '+' . $n : '-' . $n;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function __toString() {
+	public function __toString()
+	{
 		$value = $this->getValue();
-		return $value[ 'amount' ];
+		return $value['amount'];
 	}
 }
